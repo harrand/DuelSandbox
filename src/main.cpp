@@ -27,7 +27,7 @@ void init()
 	dbgui_init();
 	tz::ren::animation_renderer ar;
 	auto pkg = ar.add_gltf(tz::io::gltf::from_file("./res/models/human_male.glb"));
-	ar.gltf_play_animation(pkg, 8);
+	ar.play_animation(pkg, 8, true);
 	ar.append_to_render_graph();
 
 	tz::duration update_timer = tz::system_time();
@@ -42,11 +42,13 @@ void init()
 
 		if(!tz::dbgui::claims_mouse() && tz::wsi::is_mouse_button_down(tz::window().get_mouse_state(), tz::wsi::mouse_button::left))
 		{
-			ar.gltf_play_animation(pkg, 2);
+			ar.play_animation(pkg, 2);
+			ar.queue_animation(pkg, 8, true);
 		}
 		if(!tz::dbgui::claims_mouse() && tz::wsi::is_mouse_button_down(tz::window().get_mouse_state(), tz::wsi::mouse_button::right))
 		{
-			ar.gltf_play_animation(pkg, 1);
+			ar.play_animation(pkg, 1);
+			ar.queue_animation(pkg, 8, true);
 		}
 		// advance dbgui
 		tz::dbgui::run([&ar]()
