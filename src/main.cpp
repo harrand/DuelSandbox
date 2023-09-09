@@ -1,5 +1,6 @@
 #include "tz/tz.hpp"
 #include "tz/core/time.hpp"
+#include "tz/wsi/mouse.hpp"
 #include "tz/dbgui/dbgui.hpp"
 #include "tz/ren/animation.hpp"
 
@@ -26,6 +27,7 @@ void init()
 	dbgui_init();
 	tz::ren::animation_renderer ar;
 	auto pkg = ar.add_gltf(tz::io::gltf::from_file("./res/models/human_male.glb"));
+	ar.gltf_play_animation(pkg, 8);
 	ar.append_to_render_graph();
 
 	tz::duration update_timer = tz::system_time();
@@ -37,6 +39,15 @@ void init()
 		tz::gl::get_device().render();
 		ar.update((tz::system_time() - update_timer).seconds<float>());
 		update_timer = tz::system_time();
+
+		if(!tz::dbgui::claims_mouse() && tz::wsi::is_mouse_button_down(tz::window().get_mouse_state(), tz::wsi::mouse_button::left))
+		{
+			ar.gltf_play_animation(pkg, 2);
+		}
+		if(!tz::dbgui::claims_mouse() && tz::wsi::is_mouse_button_down(tz::window().get_mouse_state(), tz::wsi::mouse_button::right))
+		{
+			ar.gltf_play_animation(pkg, 1);
+		}
 		// advance dbgui
 		tz::dbgui::run([&ar]()
 		{
