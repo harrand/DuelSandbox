@@ -35,7 +35,7 @@ namespace game
 		constexpr virtual type get_type() = 0;
 		virtual tz::io::gltf model_data() const = 0;
 		virtual tz::trs follow(tz::trs location, tz::vec3 offset_displacement) const = 0;
-		virtual void set_animation_state(animation_state state);
+		void set_animation_state(animation_state state);
 		void set_context(context ctx);
 	protected:
 		using anim_mapping_t = std::array<std::size_t, static_cast<int>(animation_state::_count)>;

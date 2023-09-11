@@ -22,23 +22,7 @@ namespace game::skeleton
 			return game::iskeleton::type::human_male;
 		}
 
-		virtual tz::io::gltf model_data() const override
-		{
-			return tz::io::gltf::from_file("./res/models/human_male.glb");
-		}
-
-		virtual tz::trs follow(tz::trs location, tz::vec3 offset_displacement) const override
-		{
-			location.scale = tz::vec3::filled(1.0f);
-			tz::trs result{.translate = offset_displacement.swizzle<0, 2, 1>(), .rotate = {0.7071f, 0.0f, 0.0f, 0.7071f}};
-			result.combine(location);
-			result.scale[1] *= -1.0f;
-			return result;
-		}
-
-		virtual void set_animation_state(animation_state state) override
-		{
-			iskeleton::set_animation_state(state);
-		}
+		virtual tz::io::gltf model_data() const override;
+		virtual tz::trs follow(tz::trs location, tz::vec3 offset_displacement) const override;
 	};
 }

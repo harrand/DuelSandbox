@@ -14,4 +14,7 @@ tz_add_executable(
 		src/animation_system.hpp
 		src/skeleton.cpp
 		src/skeleton.hpp
+
+		src/skeletons/human_male.cpp
+		src/skeletons/human_male.hpp
 )
