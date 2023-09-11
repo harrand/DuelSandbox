@@ -12,4 +12,6 @@ tz_add_executable(
 		src/main.cpp
 		src/animation_system.cpp
 		src/animation_system.hpp
+		src/skeleton.cpp
+		src/skeleton.hpp
 )
