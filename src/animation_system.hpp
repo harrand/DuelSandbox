@@ -1,6 +1,7 @@
 #ifndef DUELSANDBOX_ANIMATION_SYSTEM_HPP
 #define DUELSANDBOX_ANIMATION_SYSTEM_HPP
 #include "tz/ren/animation.hpp"
+#include "skeleton.hpp"
 
 namespace game
 {
@@ -29,6 +30,7 @@ namespace game
 		using renderer_t = tz::ren::animation_renderer;
 		struct entity
 		{
+			std::unique_ptr<iskeleton> skeleton;
 			renderer_t::asset_package pkg;
 		};
 		renderer_t renderer = {};

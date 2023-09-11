@@ -1,4 +1,5 @@
 #include "animation_system.hpp"
+#include "skeletons/human_male.hpp"
 
 namespace game
 {
@@ -18,16 +19,21 @@ namespace game
 			opkg.pkg = this->gltf_override_cache.at(m);
 		}
 		tz::io::gltf gltf;
+		std::unique_ptr<iskeleton> skel = nullptr;
 		switch(m)
 		{
 			case model::human_male:
-				gltf = tz::io::gltf::from_file("./res/models/human_male.glb");
+				skel = std::make_unique<skeleton::human_male>();
+				gltf = skel->model_data();
 			break;
 		}
 		renderer_t::asset_package pkg = this->renderer.add_gltf(gltf, opkg);
+		skel->set_context({.renderer = &this->renderer, .pkg = pkg});
+		skel->set_animation_state(iskeleton::animation_state::idle);
 		std::size_t entity_id = this->entities.size();
 		this->entities.push_back
 		({
+			.skeleton = std::move(skel),
 			.pkg = pkg
 		});
 		return static_cast<tz::hanval>(entity_id);
@@ -44,12 +50,7 @@ namespace game
 			tz::assert(ent.pkg.objects.size());
 			renderer_t::object_handle main_obj = ent.pkg.objects.front();
 			tz::trs global = this->renderer.get_object(main_obj).global_transform;
-			global.scale = tz::vec3::filled(1.0f);
-			// move +2 Y, +5 Z
-			tz::trs result{.translate = this->camera_follow_offset.swizzle<0, 2, 1>(), .rotate = {0.7071f, 0.0f, 0.0f, 0.7071f}};
-			result.combine(global);
-			result.scale[1] *= -1.0f;
-			this->renderer.set_camera_transform(result);
+			this->renderer.set_camera_transform(ent.skeleton->follow(global, this->camera_follow_offset));
 		}
 	}
 
