@@ -10,4 +10,6 @@ tz_add_executable(
 	TARGET duel_sandbox
 	SOURCES
 		src/main.cpp
+		src/animation_system.cpp
+		src/animation_system.hpp
 )
