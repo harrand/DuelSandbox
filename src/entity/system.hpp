@@ -15,31 +15,7 @@ namespace game
 		entity_system();
 
 		template<typename T>
-		std::size_t add()
-		{
-			auto sz = this->entities.size();
-			std::unique_ptr<ientity> ent = nullptr;
-			if constexpr(std::is_base_of_v<entity_creature, T>)
-			{
-				std::unique_ptr<iskeleton> skel = nullptr;
-				// it has a skeleton.
-				// but what type of skeleton?
-				if constexpr(std::is_base_of_v<entity_generic_human, T>)
-				{
-					// human male.
-					skel = std::make_unique<skeleton::human_male>();
-					auto pkg = this->renderer.add_gltf(skel->model_data());
-					skel->set_context
-					({
-						.renderer = &this->renderer,
-						.pkg = pkg	
-					});
-					ent = std::make_unique<T>(std::move(skel), pkg);
-				}
-			}
-			this->entities.push_back(std::move(ent));
-			return sz;
-		}
+		std::size_t add();
 
 		damage_status event(eid_t ent, entity_take_damage_event e);
 		damage_status event(eid_t ent, entity_deal_damage_event e);
@@ -51,9 +27,13 @@ namespace game
 		void update(float delta);
 	private:
 		ientity* get(eid_t ent);
+		bool is_cached(iskeleton::type t) const;
+
 		tz::ren::animation_renderer renderer = {};
 		std::vector<std::unique_ptr<ientity>> entities = {};
+		std::map<iskeleton::type, tz::ren::animation_renderer::asset_package> skeleton_cache = {};
 	};
 }
 
+#include "system.inl"
 #endif // DUELSANDBOX_ENTITY_SYSTEM_HPP

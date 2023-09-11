@@ -52,4 +52,9 @@ namespace game
 		tz::assert(ent < this->entities.size());
 		return this->entities[ent].get();
 	}
+
+	bool entity_system::is_cached(iskeleton::type t) const
+	{
+		return this->skeleton_cache.find(t) != this->skeleton_cache.end();
+	}
 }

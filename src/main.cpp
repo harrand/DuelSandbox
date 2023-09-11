@@ -30,6 +30,7 @@ void init()
 	dbgui_init();
 	game::entity_system esys;
 	esys.add<game::entity_player_human>();
+	esys.add<game::entity_generic_human>();
 
 	tz::duration update_timer = tz::system_time();
 	while(!tz::window().is_close_requested())

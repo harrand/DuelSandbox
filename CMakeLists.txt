@@ -19,6 +19,7 @@ tz_add_executable(
 		src/entity/player_human.hpp
 		src/entity/system.cpp
 		src/entity/system.hpp
+		src/entity/system.inl
 
 		src/skeletons/human_male.cpp
 		src/skeletons/human_male.hpp
