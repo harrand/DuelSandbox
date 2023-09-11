@@ -25,9 +25,11 @@ namespace game
 		const tz::ren::animation_renderer& get_renderer() const;
 		tz::ren::animation_renderer& get_renderer();
 		void update(float delta);
+		void dbgui();
 	private:
 		ientity* get(eid_t ent);
 		bool is_cached(iskeleton::type t) const;
+		void dbgui_impl();
 
 		tz::ren::animation_renderer renderer = {};
 		std::vector<std::unique_ptr<ientity>> entities = {};

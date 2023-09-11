@@ -1,5 +1,6 @@
 #include "system.hpp"
 #include "tz/core/debug.hpp"
+#include "tz/dbgui/dbgui.hpp"
 
 namespace game
 {
@@ -47,6 +48,11 @@ namespace game
 		this->renderer.update(delta);
 	}
 
+	void entity_system::dbgui()
+	{
+		this->dbgui_impl();
+	}
+
 	ientity* entity_system::get(eid_t ent)
 	{
 		tz::assert(ent < this->entities.size());
@@ -56,5 +62,10 @@ namespace game
 	bool entity_system::is_cached(iskeleton::type t) const
 	{
 		return this->skeleton_cache.find(t) != this->skeleton_cache.end();
+	}
+
+	void entity_system::dbgui_impl()
+	{
+
 	}
 }

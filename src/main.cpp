@@ -22,7 +22,7 @@ int main()
 
 struct dbgui_data_t
 {
-	bool animation_renderer_enabled = false;
+	bool entity_system_enabled = false;
 } dbgui_data;
 
 void init()
@@ -45,11 +45,11 @@ void init()
 		// advance dbgui
 		tz::dbgui::run([&esys]()
 		{
-			if(dbgui_data.animation_renderer_enabled)
+			if(dbgui_data.entity_system_enabled)
 			{
-				if(ImGui::Begin("Animation System", &dbgui_data.animation_renderer_enabled))
+				if(ImGui::Begin("Entity System", &dbgui_data.entity_system_enabled))
 				{
-					//asys.dbgui();
+					esys.dbgui();
 					ImGui::End();
 				}
 			}
@@ -63,6 +63,6 @@ void dbgui_init()
 {
 	tz::dbgui::game_menu().add_callback([]()
 	{
-		ImGui::MenuItem("Animation Renderer", nullptr, &dbgui_data.animation_renderer_enabled);
+		ImGui::MenuItem("Entity System", nullptr, &dbgui_data.entity_system_enabled);
 	});
 }
