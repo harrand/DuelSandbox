@@ -3,7 +3,9 @@
 #include "tz/wsi/mouse.hpp"
 #include "tz/dbgui/dbgui.hpp"
 #include "tz/ren/animation.hpp"
-#include "animation_system.hpp"
+
+#include "entity/system.hpp"
+#include "entity/player_human.hpp"
 
 void init();
 void dbgui_init();
@@ -26,9 +28,8 @@ struct dbgui_data_t
 void init()
 {
 	dbgui_init();
-	game::animation_system asys;
-	game::animation_system::entity_handle e1 = asys.add(game::model::human_male);
-	game::animation_system::entity_handle e2 = asys.add(game::model::human_male);
+	game::entity_system esys;
+	esys.add<game::entity_player_human>();
 
 	tz::duration update_timer = tz::system_time();
 	while(!tz::window().is_close_requested())
@@ -37,17 +38,17 @@ void init()
 		tz::begin_frame();
 		// draw
 		tz::gl::get_device().render();
-		asys.update((tz::system_time() - update_timer).seconds<float>());
+		esys.update((tz::system_time() - update_timer).seconds<float>());
 		update_timer = tz::system_time();
 
 		// advance dbgui
-		tz::dbgui::run([&asys]()
+		tz::dbgui::run([&esys]()
 		{
 			if(dbgui_data.animation_renderer_enabled)
 			{
 				if(ImGui::Begin("Animation System", &dbgui_data.animation_renderer_enabled))
 				{
-					asys.dbgui();
+					//asys.dbgui();
 					ImGui::End();
 				}
 			}

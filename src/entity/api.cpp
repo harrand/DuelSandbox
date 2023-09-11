@@ -11,6 +11,11 @@ namespace game
 		return this->current_health;
 	}
 
+	float ientity::get_movement_speed() const
+	{
+		return this->movement_speed;
+	}
+
 	bool ientity::operator==(const ientity& rhs) const
 	{
 		return this->eid == rhs.eid;

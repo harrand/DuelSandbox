@@ -71,20 +71,23 @@ namespace game
 	public:
 		friend class entity_system;
 		constexpr ientity() = default;
+		~ientity() = default;
+
 		float get_health() const;
+		float get_movement_speed() const;
 		bool operator==(const ientity& rhs) const;
 		bool operator!=(const ientity& rhs) const;
 		bool operator==(const world_entity_t&) const;
 		bool operator!=(const world_entity_t&) const;
 		void update(float delta, entity_system& sys);
-		virtual bool is_dead() const;
+		virtual bool is_dead() const{return this->current_health == 0.0f;};
 	protected:
 		virtual damage_status on_deal_damage(entity_deal_damage_event e, entity_system& sys);
 		virtual damage_status on_take_damage(entity_take_damage_event e, entity_system& sys);
 		virtual heal_status on_deal_heal(entity_deal_heal_event e, entity_system& sys);
 		virtual heal_status on_take_heal(entity_take_heal_event e, entity_system& sys);
-		virtual void on_death(entity_death_event e, entity_system& sys) = 0;
-		virtual void on_update(float delta, entity_system& sys) = 0;
+		virtual void on_death(entity_death_event e, entity_system& sys){};
+		virtual void on_update(float delta, entity_system& sys){};
 	private:
 		static eid_t eid_count;
 

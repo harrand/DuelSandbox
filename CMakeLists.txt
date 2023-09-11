@@ -11,6 +11,12 @@ tz_add_executable(
 	SOURCES
 		src/entity/api.cpp
 		src/entity/api.hpp
+		src/entity/creature.cpp
+		src/entity/creature.hpp
+		src/entity/generic_human.cpp
+		src/entity/generic_human.hpp
+		src/entity/player_human.cpp
+		src/entity/player_human.hpp
 		src/entity/system.cpp
 		src/entity/system.hpp
 
