@@ -40,6 +40,12 @@ namespace game
 		virtual tz::trs follow(tz::trs location, tz::vec3 offset_displacement) const = 0;
 		virtual void set_animation_state(animation_state state)
 		{
+			tz::assert(iskeleton::impl_has_ctx());
+			if(iskeleton::old != state)
+			{
+				const bool should_loop = state != animation_state::death;
+				ctx.renderer->play_animation(ctx.pkg, iskeleton::get_animation(state), should_loop);
+			}
 			this->old = state;
 		}
 		void set_context(context ctx)
@@ -49,6 +55,10 @@ namespace game
 	protected:
 		using anim_mapping_t = std::array<std::size_t, static_cast<int>(animation_state::_count)>;
 		constexpr virtual anim_mapping_t impl_anim_to_id() = 0;
+		std::size_t get_animation(animation_state state)
+		{
+			return this->impl_anim_to_id()[static_cast<int>(state)];
+		}
 		bool impl_has_ctx() const
 		{
 			return this->ctx.renderer != nullptr;

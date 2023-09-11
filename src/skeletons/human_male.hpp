@@ -38,16 +38,6 @@ namespace game::skeleton
 
 		virtual void set_animation_state(animation_state state) override
 		{
-			tz::assert(iskeleton::impl_has_ctx());
-			switch(state)
-			{
-				case animation_state::idle:
-					if(iskeleton::old != animation_state::idle)
-					{
-						ctx.renderer->play_animation(ctx.pkg, this->impl_anim_to_id()[(int)state], true);
-					}
-				break;	
-			}
 			iskeleton::set_animation_state(state);
 		}
 	};
