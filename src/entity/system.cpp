@@ -1,4 +1,5 @@
 #include "system.hpp"
+#include "imgui.h"
 #include "tz/core/debug.hpp"
 #include "tz/dbgui/dbgui.hpp"
 
@@ -66,6 +67,40 @@ namespace game
 
 	void entity_system::dbgui_impl()
 	{
+		if(ImGui::BeginTabBar("Entity System"))
+		{
+			if(ImGui::BeginTabItem("Overview"))
+			{
+				this->dbgui_overview();
+			}
+			ImGui::EndTabItem();
+			if(ImGui::BeginTabItem("Renderer"))
+			{
+				this->dbgui_renderer();
+			}
+		}
+		ImGui::EndTabBar();
+	}
 
+	void entity_system::dbgui_overview()
+	{
+		ImGui::TextColored(ImVec4{1.0f, 0.3f, 0.3f, 1.0f}, "ENTITIES");
+		static int entity_cursor = 0;
+		if(this->entities.size())
+		{
+			ImGui::VSliderInt("##entitycursor", ImVec2{18.0f, 160.0f}, &entity_cursor, 0, this->entities.size() - 1);
+			ImGui::SameLine();
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10.0f);
+			if(ImGui::BeginChild("#entityinfo", ImVec2{0.0f, 160.0f}, false, ImGuiWindowFlags_ChildWindow))
+			{
+				this->entities[entity_cursor]->dbgui(*this);
+			}
+			ImGui::EndChild();
+		}
+	}
+
+	void entity_system::dbgui_renderer()
+	{
+		this->renderer.dbgui();
 	}
 }

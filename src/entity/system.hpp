@@ -30,6 +30,8 @@ namespace game
 		ientity* get(eid_t ent);
 		bool is_cached(iskeleton::type t) const;
 		void dbgui_impl();
+		void dbgui_overview();
+		void dbgui_renderer();
 
 		tz::ren::animation_renderer renderer = {};
 		std::vector<std::unique_ptr<ientity>> entities = {};

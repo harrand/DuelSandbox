@@ -5,6 +5,11 @@ namespace game
 	iskeleton::iskeleton(context ctx):
 	ctx(ctx){}
 
+	iskeleton::animation_state iskeleton::get_animation_state() const
+	{
+		return old;
+	}
+
 	void iskeleton::set_animation_state(animation_state state)
 	{
 		tz::assert(this->ctx.renderer != nullptr && this->ctx.pkg.objects.size());

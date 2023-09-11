@@ -19,8 +19,17 @@ namespace game
 
 		enum class type
 		{
-			human_male
+			human_male,
+			_count
 		};
+		static constexpr const char* type_get_name(type t)
+		{
+			return std::array<const char*, (int)type::_count>
+			{
+				"Human Male",
+			}[(int)t];
+		}
+
 
 		enum class animation_state
 		{
@@ -31,10 +40,25 @@ namespace game
 			_count,
 			_undefined
 		};
+		static constexpr const char* animation_state_get_name(animation_state s)
+		{
+			if(s == animation_state::_undefined)
+			{
+				return "No Animation";
+			}
+			return std::array<const char*, (int)animation_state::_count>
+			{
+				"Idle",
+				"Walk",
+				"Run",
+				"Death",
+			}[(int)s];
+		}
 
 		constexpr virtual type get_type() = 0;
 		virtual tz::io::gltf model_data() const = 0;
 		virtual tz::trs follow(tz::trs location, tz::vec3 offset_displacement) const = 0;
+		animation_state get_animation_state() const;
 		void set_animation_state(animation_state state);
 		void set_context(context ctx);
 	protected:

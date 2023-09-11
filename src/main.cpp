@@ -39,7 +39,8 @@ void init()
 		tz::begin_frame();
 		// draw
 		tz::gl::get_device().render();
-		esys.update((tz::system_time() - update_timer).seconds<float>());
+		auto millis_diff = (tz::system_time() - update_timer).millis<std::uint64_t>();
+		esys.update(millis_diff / 1000.0f);
 		update_timer = tz::system_time();
 
 		// advance dbgui

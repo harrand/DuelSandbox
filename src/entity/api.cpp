@@ -41,6 +41,16 @@ namespace game
 		this->on_update(delta, sys);
 	}
 
+	void ientity::dbgui(entity_system& sys)
+	{
+		(void)sys;
+		ImGui::Text("Entity %zu", this->eid);
+		ImGui::SliderFloat("Health", &this->current_health, 0.0f, this->max_health);
+		ImGui::SameLine();
+		ImGui::InputFloat("Max", &this->max_health, 1.0f, 5.0f);
+		ImGui::InputFloat("Movement Speed", &this->movement_speed, 0.1f, 0.5f);
+	}
+
 	damage_status ientity::on_deal_damage(entity_deal_damage_event e, entity_system& sys)
 	{
 		return sys.event(e.target,

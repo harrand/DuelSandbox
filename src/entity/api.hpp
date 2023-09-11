@@ -81,6 +81,7 @@ namespace game
 		bool operator!=(const world_entity_t&) const;
 		void update(float delta, entity_system& sys);
 		virtual bool is_dead() const{return this->current_health == 0.0f;};
+		virtual void dbgui(entity_system& sys);
 	protected:
 		virtual damage_status on_deal_damage(entity_deal_damage_event e, entity_system& sys);
 		virtual damage_status on_take_damage(entity_take_damage_event e, entity_system& sys);
