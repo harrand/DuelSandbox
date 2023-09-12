@@ -4,6 +4,9 @@
 #include "tz/dbgui/dbgui.hpp"
 #include "tz/ren/animation.hpp"
 
+#include "tz/lua/state.hpp"
+#include "tz/lua/api.hpp"
+
 #include "entity/system.hpp"
 #include "entity/player_human.hpp"
 
@@ -25,13 +28,25 @@ struct dbgui_data_t
 	bool entity_system_enabled = false;
 } dbgui_data;
 
+game::entity_system* esys_glob = nullptr;
+
+LUA_BEGIN(spawn_human)
+	std::size_t r = esys_glob->add<game::entity_player_human>();
+	esys_glob->set_tracked(r);
+	state.stack_push_uint(r);
+	return 1;
+LUA_END
+
 void init()
 {
 	dbgui_init();
 	game::entity_system esys;
+	esys_glob = &esys;
 	auto player = esys.add<game::entity_player_human>();
 	esys.add<game::entity_generic_human>();
 	esys.set_tracked(player);
+
+	LUA_REGISTER_ALL(spawn_human);
 
 	tz::duration update_timer = tz::system_time();
 	while(!tz::window().is_close_requested())
@@ -40,9 +55,10 @@ void init()
 		tz::begin_frame();
 		// draw
 		tz::gl::get_device().render();
-		auto millis_diff = (tz::system_time() - update_timer).nanos<std::uint64_t>();
+		auto now = tz::system_time();
+		auto millis_diff = (now - update_timer).nanos<std::uint64_t>();
 		esys.update(millis_diff / 1000000000.0f);
-		update_timer = tz::system_time();
+		update_timer = now;
 
 		// advance dbgui
 		tz::dbgui::run([&esys]()
