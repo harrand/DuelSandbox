@@ -1,13 +1,29 @@
 #include "player_human.hpp"
 #include "tz/wsi/keyboard.hpp"
+#include "tz/dbgui/dbgui.hpp"
 #include <iostream>
 
 namespace game
 {
+	void entity_player_human::dbgui(entity_system& sys)
+	{
+		entity_generic_human::dbgui(sys);
+		ImGui::Checkbox("Controlled", &this->controlled);
+	}
+
+	bool is_key_down(tz::wsi::key k)
+	{
+		return !tz::dbgui::claims_keyboard() && tz::wsi::is_key_down(tz::window().get_keyboard_state(), k);
+	}
+
 	void entity_player_human::on_update(float delta, entity_system& sys)
 	{
+		if(!this->controlled)
+		{
+			return;
+		}
 		bool any_transform = false;
-		if(tz::wsi::is_key_down(tz::window().get_keyboard_state(), tz::wsi::key::w))
+		if(is_key_down(tz::wsi::key::w))
 		{
 			any_transform = true;
 			tz::trs transform = this->get_base_transform(sys);
@@ -16,7 +32,7 @@ namespace game
 			this->set_base_transform(sys, transform);
 			this->get_skeleton().set_animation_state(iskeleton::animation_state::run);
 		}
-		else if(tz::wsi::is_key_down(tz::window().get_keyboard_state(), tz::wsi::key::s))
+		else if(is_key_down(tz::wsi::key::s))
 		{
 			any_transform = true;
 			tz::trs transform = this->get_base_transform(sys);
@@ -28,14 +44,14 @@ namespace game
 
 		constexpr float rotate_speed = 3.0f;
 
-		if(tz::wsi::is_key_down(tz::window().get_keyboard_state(), tz::wsi::key::a))
+		if(is_key_down(tz::wsi::key::a))
 		{
 			any_transform = true;
 			tz::trs transform = this->get_base_transform(sys);
 			transform.rotate.combine(tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, -1.57081f * delta * rotate_speed));
 			this->set_base_transform(sys, transform);
 		}
-		else if(tz::wsi::is_key_down(tz::window().get_keyboard_state(), tz::wsi::key::d))
+		else if(is_key_down(tz::wsi::key::d))
 		{
 			any_transform = true;
 			tz::trs transform = this->get_base_transform(sys);

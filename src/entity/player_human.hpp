@@ -8,8 +8,11 @@ namespace game
 	{
 	public:
 		using entity_generic_human::entity_generic_human;
+		virtual void dbgui(entity_system& sys) override;
 	protected:
 		virtual void on_update(float delta, entity_system& sys) override;
+	private:
+		bool controlled = true;
 	};
 }
 
