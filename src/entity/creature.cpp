@@ -16,6 +16,14 @@ namespace game
 		this->dbgui_impl(sys);
 	}
 
+	void entity_creature::track(entity_system& sys)
+	{
+		auto trans = this->get_global_transform(sys);
+		trans.scale = tz::vec3::filled(1.0f);
+		tz::trs follow_loc = this->get_skeleton().follow(trans, {0.0f, -2.0f, -2.5f});
+		sys.get_renderer().set_camera_transform(follow_loc);
+	}
+
 	const iskeleton& entity_creature::get_skeleton() const
 	{
 		tz::assert(this->skeleton != nullptr);
@@ -26,6 +34,19 @@ namespace game
 	{
 		tz::assert(this->skeleton != nullptr);
 		return *this->skeleton.get();
+	}
+
+	tz::trs entity_creature::get_global_transform(const entity_system& sys) const
+	{
+		tz::assert(this->resources.objects.size());
+		return sys.get_renderer().get_object_global_transform(this->resources.objects.front());
+	}
+
+	void entity_creature::set_global_transform(entity_system& sys, tz::trs global_transform)
+	{
+		tz::assert(this->resources.objects.size());
+		tz::trs local = sys.get_renderer().global_to_local_transform(this->resources.objects.front(), global_transform);
+		this->set_base_transform(sys, local);
 	}
 
 	tz::trs entity_creature::get_base_transform(const entity_system& sys) const

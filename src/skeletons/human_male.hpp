@@ -14,6 +14,7 @@ namespace game::skeleton
 				12u, // walk
 				10u, // run
 				7u, // death
+				6u, // dance
 			};
 		}
 	public:
@@ -24,5 +25,6 @@ namespace game::skeleton
 
 		virtual tz::io::gltf model_data() const override;
 		virtual tz::trs follow(tz::trs location, tz::vec3 offset_displacement) const override;
+		virtual tz::vec3 forward() const override;
 	};
 }

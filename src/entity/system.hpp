@@ -24,6 +24,8 @@ namespace game
 
 		const tz::ren::animation_renderer& get_renderer() const;
 		tz::ren::animation_renderer& get_renderer();
+		void set_tracked(std::size_t entity_id);
+		void clear_tracked();
 		void update(float delta);
 		void dbgui();
 	private:
@@ -35,6 +37,7 @@ namespace game
 
 		tz::ren::animation_renderer renderer = {};
 		std::vector<std::unique_ptr<ientity>> entities = {};
+		std::optional<std::size_t> tracked_entity = std::nullopt;
 		std::map<iskeleton::type, tz::ren::animation_renderer::asset_package> skeleton_cache = {};
 	};
 }

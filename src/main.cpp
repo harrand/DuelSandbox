@@ -29,8 +29,9 @@ void init()
 {
 	dbgui_init();
 	game::entity_system esys;
-	esys.add<game::entity_player_human>();
+	auto player = esys.add<game::entity_player_human>();
 	esys.add<game::entity_generic_human>();
+	esys.set_tracked(player);
 
 	tz::duration update_timer = tz::system_time();
 	while(!tz::window().is_close_requested())
@@ -39,8 +40,8 @@ void init()
 		tz::begin_frame();
 		// draw
 		tz::gl::get_device().render();
-		auto millis_diff = (tz::system_time() - update_timer).millis<std::uint64_t>();
-		esys.update(millis_diff / 1000.0f);
+		auto millis_diff = (tz::system_time() - update_timer).nanos<std::uint64_t>();
+		esys.update(millis_diff / 1000000000.0f);
 		update_timer = tz::system_time();
 
 		// advance dbgui

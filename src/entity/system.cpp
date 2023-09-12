@@ -39,6 +39,16 @@ namespace game
 	{
 		return this->renderer;
 	}
+
+	void entity_system::set_tracked(std::size_t entity_id)
+	{
+		this->tracked_entity = entity_id;
+	}
+
+	void entity_system::clear_tracked()
+	{
+		this->tracked_entity = std::nullopt;
+	}
 	
 	void entity_system::update(float delta)
 	{
@@ -47,6 +57,10 @@ namespace game
 			ptr->update(delta, *this);
 		}
 		this->renderer.update(delta);
+		if(this->tracked_entity.has_value())
+		{
+			this->entities[this->tracked_entity.value()]->track(*this);
+		}
 	}
 
 	void entity_system::dbgui()
@@ -72,11 +86,12 @@ namespace game
 			if(ImGui::BeginTabItem("Overview"))
 			{
 				this->dbgui_overview();
+				ImGui::EndTabItem();
 			}
-			ImGui::EndTabItem();
 			if(ImGui::BeginTabItem("Renderer"))
 			{
 				this->dbgui_renderer();
+				ImGui::EndTabItem();
 			}
 		}
 		ImGui::EndTabBar();
@@ -93,6 +108,17 @@ namespace game
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10.0f);
 			if(ImGui::BeginChild("#entityinfo", ImVec2{0.0f, 160.0f}, false, ImGuiWindowFlags_ChildWindow))
 			{
+				if(this->tracked_entity != entity_cursor && ImGui::Button("Track"))
+				{
+					this->tracked_entity = entity_cursor;
+				}
+				if(this->tracked_entity.has_value() && this->tracked_entity.value() == entity_cursor)
+				{
+					if(ImGui::Button("Untrack"))
+					{
+						this->tracked_entity = std::nullopt;
+					}
+				}
 				this->entities[entity_cursor]->dbgui(*this);
 			}
 			ImGui::EndChild();

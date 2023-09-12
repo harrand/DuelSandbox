@@ -15,4 +15,9 @@ namespace game::skeleton
 		result.scale[1] *= -1.0f;
 		return result;
 	}
+
+	tz::vec3 human_male::forward() const
+	{
+		return {0.0f, 1.0f, 0.0f};
+	}
 }

@@ -37,6 +37,7 @@ namespace game
 			walk,
 			run,
 			death,
+			dance,
 			_count,
 			_undefined
 		};
@@ -52,12 +53,14 @@ namespace game
 				"Walk",
 				"Run",
 				"Death",
+				"Dance"
 			}[(int)s];
 		}
 
 		constexpr virtual type get_type() = 0;
 		virtual tz::io::gltf model_data() const = 0;
 		virtual tz::trs follow(tz::trs location, tz::vec3 offset_displacement) const = 0;
+		virtual tz::vec3 forward() const = 0;
 		animation_state get_animation_state() const;
 		void set_animation_state(animation_state state);
 		void set_context(context ctx);
