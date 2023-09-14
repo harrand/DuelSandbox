@@ -50,7 +50,7 @@ namespace game
 			tz::assert(ent.pkg.objects.size());
 			renderer_t::object_handle main_obj = ent.pkg.objects.front();
 			tz::trs global = this->renderer.get_object(main_obj).global_transform;
-			this->renderer.set_camera_transform(ent.skeleton->follow(global, this->camera_follow_offset));
+			this->renderer.set_camera_transform(ent.skeleton->follow(global, this->camera_follow_offset, {}));
 		}
 	}
 

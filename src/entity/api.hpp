@@ -1,5 +1,7 @@
 #ifndef DUELSANDBOX_ENTITY_API_HPP
 #define DUELSANDBOX_ENTITY_API_HPP
+#include "tz/core/data/vector.hpp"
+#include "tz/core/data/quat.hpp"
 #include <cstddef>
 #include <limits>
 #include <optional>
@@ -82,7 +84,7 @@ namespace game
 		void update(float delta, entity_system& sys);
 		virtual bool is_dead() const{return this->current_health == 0.0f;};
 		virtual void dbgui(entity_system& sys);
-		virtual void track(entity_system& sys){};
+		virtual void track(entity_system& sys, tz::vec3 displacement_offset, tz::quat rotation_offset){};
 	protected:
 		virtual damage_status on_deal_damage(entity_deal_damage_event e, entity_system& sys);
 		virtual damage_status on_take_damage(entity_take_damage_event e, entity_system& sys);
@@ -96,7 +98,7 @@ namespace game
 		eid_t eid = eid_count++;
 		float current_health = 0.0f;
 		float max_health = 0.0f;
-		float movement_speed = 2.5f;
+		float movement_speed = 1.5f;
 	};
 }
 

@@ -12,7 +12,7 @@ namespace game
 		entity_creature() = default;
 		entity_creature(std::unique_ptr<iskeleton> skeleton, tz::ren::animation_renderer::asset_package resources);
 		virtual void dbgui(entity_system& sys) override;
-		virtual void track(entity_system& sys) override;
+		virtual void track(entity_system& sys, tz::vec3 displacement_offset, tz::quat rotation_offset) override;
 		const iskeleton& get_skeleton() const;
 		iskeleton& get_skeleton();
 

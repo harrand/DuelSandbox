@@ -13,6 +13,7 @@ namespace game
 		virtual void on_update(float delta, entity_system& sys) override;
 	private:
 		bool controlled = true;
+		tz::vec2ui old_mouse_position = tz::vec2::zero();
 	};
 }
 

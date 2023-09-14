@@ -16,11 +16,11 @@ namespace game
 		this->dbgui_impl(sys);
 	}
 
-	void entity_creature::track(entity_system& sys)
+	void entity_creature::track(entity_system& sys, tz::vec3 displacement_offset, tz::quat rotation_offset)
 	{
 		auto trans = this->get_global_transform(sys);
 		trans.scale = tz::vec3::filled(1.0f);
-		tz::trs follow_loc = this->get_skeleton().follow(trans, {0.0f, -2.0f, -2.5f});
+		tz::trs follow_loc = this->get_skeleton().follow(trans, displacement_offset, rotation_offset);
 		sys.get_renderer().set_camera_transform(follow_loc);
 	}
 

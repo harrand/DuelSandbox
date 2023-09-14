@@ -17,7 +17,8 @@ int main()
 {
 	tz::initialise
 	({
-		.name = "Duel Sandbox"
+		.name = "Duel Sandbox",
+		.flags = {tz::application_flag::window_transparent}
 	});
 	init();
 	tz::terminate();

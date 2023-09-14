@@ -28,6 +28,11 @@ namespace game
 		void clear_tracked();
 		void update(float delta);
 		void dbgui();
+
+		tz::vec3 get_follow_offset_displacement() const;
+		void set_follow_offset_displacement(tz::vec3 displacement);
+		tz::quat get_follow_offset_rotation() const;
+		void set_follow_offset_rotation(tz::quat rotation);
 	private:
 		ientity* get(eid_t ent);
 		bool is_cached(iskeleton::type t) const;
@@ -39,6 +44,8 @@ namespace game
 		std::vector<std::unique_ptr<ientity>> entities = {};
 		std::optional<std::size_t> tracked_entity = std::nullopt;
 		std::map<iskeleton::type, tz::ren::animation_renderer::asset_package> skeleton_cache = {};
+		tz::vec3 follow_offset_displacement = {0.0f, -2.0f, -2.5f};
+		tz::quat follow_offset_rotation = tz::quat::from_axis_angle(tz::vec3::zero(), 1.0f);
 	};
 }
 

@@ -59,13 +59,37 @@ namespace game
 		this->renderer.update(delta);
 		if(this->tracked_entity.has_value())
 		{
-			this->entities[this->tracked_entity.value()]->track(*this);
+			this->entities[this->tracked_entity.value()]->track(
+				*this,
+				this->follow_offset_displacement,
+				this->follow_offset_rotation.inversed()
+			);
 		}
 	}
 
 	void entity_system::dbgui()
 	{
 		this->dbgui_impl();
+	}
+
+	tz::vec3 entity_system::get_follow_offset_displacement() const
+	{
+		return this->follow_offset_displacement;
+	}
+
+	void entity_system::set_follow_offset_displacement(tz::vec3 displacement)
+	{
+		this->follow_offset_displacement = displacement;
+	}
+
+	tz::quat entity_system::get_follow_offset_rotation() const
+	{
+		return this->follow_offset_rotation;
+	}
+
+	void entity_system::set_follow_offset_rotation(tz::quat rotation)
+	{
+		this->follow_offset_rotation = rotation;
 	}
 
 	ientity* entity_system::get(eid_t ent)

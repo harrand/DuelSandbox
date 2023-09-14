@@ -1,5 +1,7 @@
 #include "player_human.hpp"
+#include "system.hpp"
 #include "tz/wsi/keyboard.hpp"
+#include "tz/wsi/mouse.hpp"
 #include "tz/dbgui/dbgui.hpp"
 #include <iostream>
 
@@ -16,21 +18,56 @@ namespace game
 		return !tz::dbgui::claims_keyboard() && tz::wsi::is_key_down(tz::window().get_keyboard_state(), k);
 	}
 
+	bool is_mouse_down(tz::wsi::mouse_button b)
+	{
+		return !tz::dbgui::claims_mouse() && tz::wsi::is_mouse_button_down(tz::window().get_mouse_state(), b);
+	}
+
 	void entity_player_human::on_update(float delta, entity_system& sys)
 	{
+		tz::vec2ui new_mouse_pos = tz::window().get_mouse_state().mouse_position;
+		tz::vec2 mouse_delta = static_cast<tz::vec2>(new_mouse_pos) - this->old_mouse_position;
+		this->old_mouse_position = new_mouse_pos;
 		if(!this->controlled)
 		{
 			return;
 		}
 		bool any_transform = false;
+		bool any_rotate = false;
+		if(is_mouse_down(tz::wsi::mouse_button::middle))
+		{
+			any_rotate = true;
+			constexpr float angular_velocity = 8.0f;
+			tz::vec2ui dims = tz::window().get_dimensions();
+			tz::vec2 delta = mouse_delta;
+			delta[0] /= dims[0];
+			delta[1] /= dims[1];
+
+			tz::quat r1 = tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, delta[0] * angular_velocity);
+			//tz::quat r2 = tz::quat::from_axis_angle({1.0f, 0.0f, 0.0f}, delta[1]);
+			//r1.combine(r2);
+
+			tz::quat old_rot = sys.get_follow_offset_rotation();
+			old_rot.combine(r1);
+			sys.set_follow_offset_rotation(old_rot);
+		}
 		if(is_key_down(tz::wsi::key::w))
 		{
 			any_transform = true;
 			tz::trs transform = this->get_base_transform(sys);
 			tz::vec3 forward = transform.rotate.rotate(this->get_skeleton().forward());
-			transform.translate += forward.normalised() * this->get_movement_speed() * delta;
+			tz::vec3 move_amt = forward.normalised() * this->get_movement_speed() * delta;
+			if(is_key_down(tz::wsi::key::left_shift))
+			{
+				this->get_skeleton().set_animation_state(iskeleton::animation_state::walk);
+			}
+			else
+			{
+				this->get_skeleton().set_animation_state(iskeleton::animation_state::run);
+				move_amt *= 2.5f;
+			}
+			transform.translate += move_amt;
 			this->set_base_transform(sys, transform);
-			this->get_skeleton().set_animation_state(iskeleton::animation_state::run);
 		}
 		else if(is_key_down(tz::wsi::key::s))
 		{
@@ -62,6 +99,13 @@ namespace game
 		{
 			// well he ait doing anything! idle them!
 			this->get_skeleton().set_animation_state(iskeleton::animation_state::idle);
+		}
+		if(any_transform && !any_rotate)
+		{
+			constexpr float normalise_rotation_factor = 2.5f;
+			tz::quat rot = sys.get_follow_offset_rotation();
+			rot = rot.slerp(tz::quat::from_axis_angle(tz::vec3::zero(), 1.0f), delta * normalise_rotation_factor);
+			sys.set_follow_offset_rotation(rot);
 		}
 	}
 }
