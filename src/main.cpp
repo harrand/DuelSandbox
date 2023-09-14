@@ -45,6 +45,7 @@ void init()
 	auto player = esys.add<game::entity_player_human>();
 	esys.add<game::entity_generic_human>();
 	esys.set_tracked(player);
+	esys.get_renderer().add_gltf(tz::io::gltf::from_file("./res/models/tile5x5.glb"));
 
 	LUA_REGISTER_ALL(spawn_human);
 
