@@ -12,9 +12,10 @@ namespace game
 {
 	struct buffer_data
 	{
-		tz::mat4 model = tz::model({0.0f, -15.0f, 0.0f}, tz::vec3::zero(), tz::vec3::filled(1.0f) * 0.2f);
+		tz::mat4 model = tz::model({0.0f, -15.0f, 0.0f}, tz::vec3::zero(), {1.0f, 0.4f, 1.0f});
 		tz::mat4 view = tz::view(tz::vec3::zero(), tz::vec3::zero());
 		tz::mat4 projection;
+		tz::vec3 camera_position;
 	};
 
 	struct feedback_data
@@ -33,7 +34,11 @@ namespace game
 		auto dimsf = static_cast<tz::vec2>(tz::window().get_dimensions());
 		bufdat.projection = tz::perspective(1.5708f, dimsf[0] / dimsf[1], 0.1f, 1000.0f);
 
-		bufdat.view = this->cam_rot.matrix() * tz::translate(this->cam_pos);
+		tz::vec3 height_only = this->cam_pos;
+		height_only[0] = height_only[2] = 0.0f;
+		bufdat.view = tz::translate(height_only) * this->cam_rot.matrix();
+		bufdat.camera_position[0] = -this->cam_pos[0];
+		bufdat.camera_position[2] = -this->cam_pos[2];
 	}
 
 	void terrain_renderer::set_camera_position(tz::vec3 cam_pos)
@@ -65,6 +70,7 @@ namespace game
 		}));
 		rinfo.set_options({tz::gl::renderer_option::no_present});
 		rinfo.state().graphics.tri_count = 4;
+		rinfo.state().graphics.clear_colour = tz::vec3{0.76f, 0.835f, 0.855f}.with_more(1.0f);
 		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(terrain, vertex));
 		rinfo.shader().set_shader(tz::gl::shader_stage::tessellation_control, ImportedShaderSource(terrain, tesscon));
 		rinfo.shader().set_shader(tz::gl::shader_stage::tessellation_evaluation, ImportedShaderSource(terrain, tesseval));
