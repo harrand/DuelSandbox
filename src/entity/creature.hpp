@@ -15,6 +15,7 @@ namespace game
 		virtual void track(entity_system& sys, tz::vec3 displacement_offset, tz::quat rotation_offset) override;
 		const iskeleton& get_skeleton() const;
 		iskeleton& get_skeleton();
+		const tz::ren::animation_renderer::asset_package& get_asset_package() const;
 
 		tz::trs get_global_transform(const entity_system& sys) const;
 		void set_global_transform(entity_system& sys, tz::trs global_transform);

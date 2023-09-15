@@ -7,7 +7,7 @@ namespace game
 	resources(resources),
 	skeleton(std::move(skeleton))
 	{
-
+		ientity::static_flags |= static_entity_flag::creature;
 	}
 
 	void entity_creature::dbgui(entity_system& sys)
@@ -34,6 +34,11 @@ namespace game
 	{
 		tz::assert(this->skeleton != nullptr);
 		return *this->skeleton.get();
+	}
+
+	const tz::ren::animation_renderer::asset_package& entity_creature::get_asset_package() const
+	{
+		return this->resources;
 	}
 
 	tz::trs entity_creature::get_global_transform(const entity_system& sys) const

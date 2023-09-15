@@ -37,4 +37,16 @@ namespace game
 		this->entities.push_back(std::move(ent));
 		return sz;
 	}
+
+	template<typename T>
+	const T& entity_system::get(std::size_t entity_id) const
+	{
+		return *static_cast<const T*>(this->entities[entity_id].get());
+	}
+
+	template<typename T>
+	T& entity_system::get(std::size_t entity_id)
+	{
+		return *static_cast<T*>(this->entities[entity_id].get());
+	}
 }

@@ -16,6 +16,12 @@ namespace game
 
 		template<typename T>
 		std::size_t add();
+
+		template<typename T>
+		const T& get(std::size_t entity_id) const;
+		template<typename T>
+		T& get(std::size_t entity_id);
+
 		std::size_t entity_count() const;
 
 		damage_status event(eid_t ent, entity_take_damage_event e);

@@ -68,7 +68,8 @@ namespace game
 
 	enum class static_entity_flag
 	{
-		player // entity is a player-controlled entity.
+		player, // entity is a player-controlled entity.
+		creature, // entity is a creature and thus can safely be interpreted as `entity_creature`
 	};
 	using static_entity_flags = tz::enum_field<static_entity_flag>;
 

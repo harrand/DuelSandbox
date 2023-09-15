@@ -10,10 +10,7 @@ namespace game
 	entity_player_human::entity_player_human(std::unique_ptr<iskeleton> skeleton, tz::ren::animation_renderer::asset_package resources):
 	entity_generic_human(std::move(skeleton), resources)
 	{
-		ientity::static_flags = 
-		{
-			static_entity_flag::player
-		};
+		ientity::static_flags |= static_entity_flag::player;
 	}
 
 	void entity_player_human::dbgui(entity_system& sys)
