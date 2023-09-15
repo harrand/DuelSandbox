@@ -7,6 +7,15 @@
 
 namespace game
 {
+	entity_player_human::entity_player_human(std::unique_ptr<iskeleton> skeleton, tz::ren::animation_renderer::asset_package resources):
+	entity_generic_human(std::move(skeleton), resources)
+	{
+		ientity::static_flags = 
+		{
+			static_entity_flag::player
+		};
+	}
+
 	void entity_player_human::dbgui(entity_system& sys)
 	{
 		entity_generic_human::dbgui(sys);
@@ -28,12 +37,23 @@ namespace game
 		tz::vec2ui new_mouse_pos = tz::window().get_mouse_state().mouse_position;
 		tz::vec2 mouse_delta = static_cast<tz::vec2>(new_mouse_pos) - this->old_mouse_position;
 		this->old_mouse_position = new_mouse_pos;
+
+		int new_wheel_position = tz::window().get_mouse_state().wheel_position;
+		int wheel_delta = new_wheel_position - this->old_mouse_wheel_position;
+		this->old_mouse_wheel_position = new_wheel_position;
 		if(!this->controlled)
 		{
 			return;
 		}
 		bool any_transform = false;
 		bool any_rotate = false;
+		if(wheel_delta != 0)
+		{
+			float sc = sys.get_follow_offset_scale();
+			sc -= (0.1f * wheel_delta);
+			sc = std::clamp(sc, 0.1f, 10.0f);
+			sys.set_follow_offset_scale(sc);
+		}
 		if(is_mouse_down(tz::wsi::mouse_button::middle))
 		{
 			any_rotate = true;

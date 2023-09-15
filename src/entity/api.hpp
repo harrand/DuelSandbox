@@ -66,8 +66,13 @@ namespace game
 		return eid != std::numeric_limits<eid_t>::max();
 	}
 
-	class entity_system;
+	enum class static_entity_flag
+	{
+		player // entity is a player-controlled entity.
+	};
+	using static_entity_flags = tz::enum_field<static_entity_flag>;
 
+	class entity_system;
 	class ientity
 	{
 	public:
@@ -75,7 +80,9 @@ namespace game
 		constexpr ientity() = default;
 		~ientity() = default;
 
+		bool is(static_entity_flag sflag) const;
 		float get_health() const;
+		float get_max_health() const;
 		float get_movement_speed() const;
 		bool operator==(const ientity& rhs) const;
 		bool operator!=(const ientity& rhs) const;
@@ -92,6 +99,8 @@ namespace game
 		virtual heal_status on_take_heal(entity_take_heal_event e, entity_system& sys);
 		virtual void on_death(entity_death_event e, entity_system& sys){};
 		virtual void on_update(float delta, entity_system& sys){};
+
+		static_entity_flags static_flags = {};
 	private:
 		static eid_t eid_count;
 

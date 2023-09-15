@@ -17,8 +17,7 @@ int main()
 {
 	tz::initialise
 	({
-		.name = "Duel Sandbox",
-		.flags = {tz::application_flag::window_transparent}
+		.name = "Duel Sandbox"
 	});
 	init();
 	tz::terminate();
@@ -84,5 +83,12 @@ void dbgui_init()
 	tz::dbgui::game_menu().add_callback([]()
 	{
 		ImGui::MenuItem("Entity System", nullptr, &dbgui_data.entity_system_enabled);
+	});
+	tz::dbgui::game_bar().add_callback([]()
+	{
+		if(esys_glob != nullptr)
+		{
+			esys_glob->dbgui_bar();
+		}
 	});
 }

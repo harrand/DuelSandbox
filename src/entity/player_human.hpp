@@ -7,13 +7,14 @@ namespace game
 	class entity_player_human : public entity_generic_human
 	{
 	public:
-		using entity_generic_human::entity_generic_human;
+		entity_player_human(std::unique_ptr<iskeleton> skeleton, tz::ren::animation_renderer::asset_package resources);
 		virtual void dbgui(entity_system& sys) override;
 	protected:
 		virtual void on_update(float delta, entity_system& sys) override;
 	private:
 		bool controlled = true;
 		tz::vec2ui old_mouse_position = tz::vec2::zero();
+		int old_mouse_wheel_position = 0;
 	};
 }
 

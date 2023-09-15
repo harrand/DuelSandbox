@@ -6,9 +6,19 @@ namespace game
 {
 	std::size_t ientity::eid_count = 0;
 
+	bool ientity::is(static_entity_flag sflag) const
+	{
+		return this->static_flags.contains(sflag);
+	}
+
 	float ientity::get_health() const
 	{
 		return this->current_health;
+	}
+
+	float ientity::get_max_health() const
+	{
+		return this->max_health;
 	}
 
 	float ientity::get_movement_speed() const

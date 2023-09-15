@@ -10,6 +10,11 @@ namespace game
 		this->renderer.append_to_render_graph();
 	}
 
+	std::size_t entity_system::entity_count() const
+	{
+		return this->entities.size();
+	}
+
 	damage_status entity_system::event(eid_t ent, entity_take_damage_event e)
 	{
 		return this->get(ent)->on_take_damage(e, *this);
@@ -61,7 +66,7 @@ namespace game
 		{
 			this->entities[this->tracked_entity.value()]->track(
 				*this,
-				this->follow_offset_displacement,
+				this->follow_offset_displacement * follow_offset_scale,
 				this->follow_offset_rotation.inversed()
 			);
 		}
@@ -70,6 +75,11 @@ namespace game
 	void entity_system::dbgui()
 	{
 		this->dbgui_impl();
+	}
+
+	void entity_system::dbgui_bar()
+	{
+		this->dbgui_bar_impl();
 	}
 
 	tz::vec3 entity_system::get_follow_offset_displacement() const
@@ -90,6 +100,16 @@ namespace game
 	void entity_system::set_follow_offset_rotation(tz::quat rotation)
 	{
 		this->follow_offset_rotation = rotation;
+	}
+
+	float entity_system::get_follow_offset_scale() const
+	{
+		return this->follow_offset_scale;
+	}
+
+	void entity_system::set_follow_offset_scale(float scale)
+	{
+		this->follow_offset_scale = scale;
 	}
 
 	ientity* entity_system::get(eid_t ent)
@@ -152,5 +172,17 @@ namespace game
 	void entity_system::dbgui_renderer()
 	{
 		this->renderer.dbgui();
+	}
+
+	void entity_system::dbgui_bar_impl()
+	{
+		for(const auto& ent : this->entities)
+		{
+			if(ent != nullptr && ent->is(static_entity_flag::player))
+			{
+				ImGui::Text("%.2f/%.2f HP", ent->get_health(), ent->get_max_health());
+				ImGui::SameLine();
+			}
+		}
 	}
 }
