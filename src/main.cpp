@@ -7,6 +7,8 @@
 #include "tz/lua/state.hpp"
 #include "tz/lua/api.hpp"
 
+#include "renderer/terrain.hpp"
+
 #include "entity/system.hpp"
 #include "entity/player_human.hpp"
 
@@ -40,6 +42,9 @@ LUA_END
 void init()
 {
 	dbgui_init();
+
+	game::terrain_renderer tren;
+	tren.append_to_render_graph();
 	game::entity_system esys;
 	esys_glob = &esys;
 	auto player = esys.add<game::entity_player_human>();
@@ -58,6 +63,25 @@ void init()
 		tz::gl::get_device().render();
 		auto now = tz::system_time();
 		auto millis_diff = (now - update_timer).nanos<std::uint64_t>();
+		tren.update();
+		//tren.set_camera_transform(esys.get_renderer().get_camera_transform());
+
+		if(esys.get_tracked().has_value())
+		{
+			std::size_t e = esys.get_tracked().value();
+			auto& creature = esys.get<game::entity_creature>(e);
+			auto objh = creature.get_asset_package().objects.front();
+			tz::trs trs = esys.get_renderer().get_object_global_transform(objh);
+			trs.scale = tz::vec3::filled(1.0f);
+			trs = creature.get_skeleton().follow(trs, esys.get_follow_offset_displacement() * esys.get_follow_offset_scale(), esys.get_follow_offset_rotation().inverse());
+			trs.rotate.combine(tz::quat::from_axis_angle({-1.0f, 0.0f, 0.0f}, 3.14159f));
+			trs.rotate.inverse();
+			trs.rotate.combine(tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, 3.14159f));
+			trs.translate[2] *= -1.0f;
+			tren.set_camera_position(trs.translate);
+			tren.set_camera_rotation(trs.rotate);
+		}
+
 		esys.update(millis_diff / 1000000000.0f);
 		update_timer = now;
 

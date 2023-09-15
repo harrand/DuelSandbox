@@ -32,6 +32,7 @@ namespace game
 		const tz::ren::animation_renderer& get_renderer() const;
 		tz::ren::animation_renderer& get_renderer();
 		void set_tracked(std::size_t entity_id);
+		std::optional<std::size_t> get_tracked() const;
 		void clear_tracked();
 		void update(float delta);
 		void dbgui();
@@ -51,7 +52,7 @@ namespace game
 		void dbgui_renderer();
 		void dbgui_bar_impl();
 
-		tz::ren::animation_renderer renderer = {};
+		tz::ren::animation_renderer renderer = {1024u, {tz::gl::renderer_option::no_clear_output}};
 		std::vector<std::unique_ptr<ientity>> entities = {};
 		std::optional<std::size_t> tracked_entity = std::nullopt;
 		std::map<iskeleton::type, tz::ren::animation_renderer::asset_package> skeleton_cache = {};

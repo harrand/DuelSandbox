@@ -50,6 +50,11 @@ namespace game
 		this->tracked_entity = entity_id;
 	}
 
+	std::optional<std::size_t> entity_system::get_tracked() const
+	{
+		return this->tracked_entity;
+	}
+
 	void entity_system::clear_tracked()
 	{
 		this->tracked_entity = std::nullopt;
