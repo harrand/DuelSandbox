@@ -1,4 +1,4 @@
-#include "../skeleton.hpp"
+#include "api.hpp"
 
 namespace game::skeleton
 {

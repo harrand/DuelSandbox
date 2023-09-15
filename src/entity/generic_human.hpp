@@ -1,7 +1,7 @@
 #ifndef DUELSANDBOX_ENTITY_GENERIC_HUMAN_HPP
 #define DUELSANDBOX_ENTITY_GENERIC_HUMAN_HPP
 #include "creature.hpp"
-#include "../skeletons/human_male.hpp"
+#include "../skeleton/human_male.hpp"
 
 namespace game
 {

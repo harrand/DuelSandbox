@@ -21,10 +21,10 @@ tz_add_executable(
 		src/entity/system.hpp
 		src/entity/system.inl
 
-		src/skeletons/human_male.cpp
-		src/skeletons/human_male.hpp
+		src/skeleton/api.cpp
+		src/skeleton/api.hpp
+		src/skeleton/human_male.cpp
+		src/skeleton/human_male.hpp
 
 		src/main.cpp
-		src/skeleton.cpp
-		src/skeleton.hpp
 )

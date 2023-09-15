@@ -1,7 +1,7 @@
 #ifndef DUELSANDBOX_ENTITY_CREATURE_HPP
 #define DUELSANDBOX_ENTITY_CREATURE_HPP
 #include "api.hpp"
-#include "../skeleton.hpp"
+#include "../skeleton/api.hpp"
 #include "tz/ren/animation.hpp"
 
 namespace game
