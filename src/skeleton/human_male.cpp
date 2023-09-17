@@ -29,6 +29,9 @@ namespace game::skeleton
 			case iskeleton::landmark::root:
 				return this->ctx.pkg.objects.front();
 			break;
+			case iskeleton::landmark::head:
+				return this->ctx.pkg.objects[9];
+			break;
 			default: break;
 		}
 		tz::error("Unimplemented landmark %s", landmark_get_name(l));

@@ -41,28 +41,37 @@ namespace game
 		return this->resources;
 	}
 
-	tz::trs entity_creature::get_global_transform(const entity_system& sys) const
+	tz::trs entity_creature::get_global_transform(const entity_system& sys, iskeleton::landmark landmark) const
 	{
 		tz::assert(this->resources.objects.size());
-		return sys.get_renderer().get_object_global_transform(this->skeleton->get_landmark(iskeleton::landmark::root));
+		auto objh = this->skeleton->get_landmark(landmark);
+		tz::assert(std::find(this->resources.objects.begin(), this->resources.objects.end(), objh) != this->resources.objects.end(), "Landmark retrieved object handle %zu which is not owned by this skeleton", static_cast<std::size_t>(static_cast<tz::hanval>(objh)));
+		return sys.get_renderer().get_object_global_transform(objh);
 	}
 
-	void entity_creature::set_global_transform(entity_system& sys, tz::trs global_transform)
+	void entity_creature::set_global_transform(entity_system& sys, tz::trs global_transform, iskeleton::landmark landmark)
 	{
 		tz::assert(this->resources.objects.size());
-		tz::trs local = sys.get_renderer().global_to_local_transform(this->skeleton->get_landmark(iskeleton::landmark::root), global_transform);
+		auto objh = this->skeleton->get_landmark(landmark);
+		tz::assert(std::find(this->resources.objects.begin(), this->resources.objects.end(), objh) != this->resources.objects.end(), "Landmark retrieved object handle %zu which is not owned by this skeleton", static_cast<std::size_t>(static_cast<tz::hanval>(objh)));
+		tz::trs local = sys.get_renderer().global_to_local_transform(objh, global_transform);
 		this->set_base_transform(sys, local);
 	}
 
-	tz::trs entity_creature::get_base_transform(const entity_system& sys) const
+	tz::trs entity_creature::get_base_transform(const entity_system& sys, iskeleton::landmark landmark) const
 	{
 		tz::assert(this->resources.objects.size());
-		return sys.get_renderer().get_object_base_transform(this->resources.objects.front());
+		auto objh = this->skeleton->get_landmark(landmark);
+		tz::assert(std::find(this->resources.objects.begin(), this->resources.objects.end(), objh) != this->resources.objects.end(), "Landmark retrieved object handle %zu which is not owned by this skeleton", static_cast<std::size_t>(static_cast<tz::hanval>(objh)));
+		return sys.get_renderer().get_object_base_transform(objh);
 	}
 
-	void entity_creature::set_base_transform(entity_system& sys, tz::trs transform)
+	void entity_creature::set_base_transform(entity_system& sys, tz::trs transform, iskeleton::landmark landmark)
 	{
-		sys.get_renderer().set_object_base_transform(this->resources.objects.front(), transform);
+		tz::assert(this->resources.objects.size());
+		auto objh = this->skeleton->get_landmark(landmark);
+		tz::assert(std::find(this->resources.objects.begin(), this->resources.objects.end(), objh) != this->resources.objects.end(), "Landmark retrieved object handle %zu which is not owned by this skeleton", static_cast<std::size_t>(static_cast<tz::hanval>(objh)));
+		sys.get_renderer().set_object_base_transform(objh, transform);
 	}
 
 	void entity_creature::dbgui_impl(entity_system& sys)

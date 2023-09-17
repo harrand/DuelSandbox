@@ -40,6 +40,7 @@ namespace game
 		{
 			// core area of where the skeleton lives. think of it as the origin of the skeleton. may not necessarily be in the middle!
 			root,
+			head,
 			_count
 		};
 		static constexpr const char* landmark_get_name(landmark l)
@@ -47,6 +48,7 @@ namespace game
 			return std::array<const char*, (int)landmark::_count>
 			{
 				"Root",
+				"Head",
 			}[(int)l];
 		}
 
