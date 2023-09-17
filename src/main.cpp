@@ -74,10 +74,9 @@ void init()
 			tz::trs trs = esys.get_renderer().get_object_global_transform(objh);
 			trs.scale = tz::vec3::filled(1.0f);
 			trs = creature.get_skeleton().follow(trs, esys.get_follow_offset_displacement(), esys.get_follow_offset_rotation().inverse());
-			trs.rotate.combine(tz::quat::from_axis_angle({-1.0f, 0.0f, 0.0f}, 3.14159f));
-			trs.rotate.inverse();
-			trs.rotate.combine(tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, 3.14159f));
-			trs.translate[2] *= -1.0f;
+			//trs.rotate.combine(tz::quat::from_axis_angle({-1.0f, 0.0f, 0.0f}, 3.14159f));
+			trs.inverse();
+			//trs.rotate.combine(tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, 3.14159f));
 			tren.set_camera_position(trs.translate);
 			tren.set_camera_rotation(trs.rotate);
 		}

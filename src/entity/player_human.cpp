@@ -51,6 +51,18 @@ namespace game
 			sc = std::clamp(sc, 0.1f, 10.0f);
 			sys.set_follow_offset_scale(sc);
 		}
+		if(is_key_down(tz::wsi::key::tab))
+		{
+			if(!autorun_latch)
+			{
+				autorun = !autorun;
+				autorun_latch = true;
+			}
+		}
+		else
+		{
+			autorun_latch = false;
+		}
 		if(is_mouse_down(tz::wsi::mouse_button::middle))
 		{
 			any_rotate = true;
@@ -59,17 +71,23 @@ namespace game
 			tz::vec2 delta = mouse_delta;
 			delta[0] /= dims[0];
 			delta[1] /= dims[1];
+			delta *= -1.0f;
 
 			tz::quat r1 = tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, delta[0] * angular_velocity);
-			//tz::quat r2 = tz::quat::from_axis_angle({1.0f, 0.0f, 0.0f}, delta[1]);
-			//r1.combine(r2);
+			//tz::quat r2 = tz::quat::from_axis_angle({1.0f, 0.0f, 0.0f}, delta[1] * angular_velocity);
+			//r1 = r2.combined(r1);
 
 			tz::quat old_rot = sys.get_follow_offset_rotation();
 			old_rot.combine(r1);
 			sys.set_follow_offset_rotation(old_rot);
 		}
-		if(is_key_down(tz::wsi::key::w))
+		if(this->autorun || is_key_down(tz::wsi::key::w))
 		{
+			if(is_key_down(tz::wsi::key::w))
+			{
+				this->autorun = false;
+				this->autorun_latch = false;
+			}
 			any_transform = true;
 			tz::trs transform = this->get_base_transform(sys);
 			tz::vec3 forward = transform.rotate.rotate(this->get_skeleton().forward());
@@ -102,14 +120,14 @@ namespace game
 		{
 			any_transform = true;
 			tz::trs transform = this->get_base_transform(sys);
-			transform.rotate.combine(tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, -1.57081f * delta * rotate_speed));
+			transform.rotate.combine(tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, 1.57081f * delta * rotate_speed));
 			this->set_base_transform(sys, transform);
 		}
 		else if(is_key_down(tz::wsi::key::d))
 		{
 			any_transform = true;
 			tz::trs transform = this->get_base_transform(sys);
-			transform.rotate.combine(tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, 1.57081f * delta * rotate_speed));
+			transform.rotate.combine(tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, -1.57081f * delta * rotate_speed));
 			this->set_base_transform(sys, transform);
 		}
 		if(!any_transform)

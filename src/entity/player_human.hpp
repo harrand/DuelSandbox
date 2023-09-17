@@ -15,6 +15,8 @@ namespace game
 		bool controlled = true;
 		tz::vec2ui old_mouse_position = tz::vec2::zero();
 		int old_mouse_wheel_position = 0;
+		bool autorun_latch = false;
+		bool autorun = false;
 	};
 }
 
