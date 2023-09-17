@@ -20,4 +20,18 @@ namespace game::skeleton
 	{
 		return {0.0f, 0.0f, -1.0f};
 	}
+
+	tz::ren::animation_renderer::object_handle human_male::get_landmark(landmark l) const
+	{
+		tz::assert(this->ctx.pkg.objects.size());
+		switch(l)
+		{
+			case iskeleton::landmark::root:
+				return this->ctx.pkg.objects.front();
+			break;
+			default: break;
+		}
+		tz::error("Unimplemented landmark %s", landmark_get_name(l));
+		return tz::nullhand;
+	}
 }

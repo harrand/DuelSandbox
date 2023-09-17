@@ -26,5 +26,6 @@ namespace game::skeleton
 		virtual tz::io::gltf model_data() const override;
 		virtual tz::trs follow(tz::trs location, tz::vec3 offset_displacement, tz::quat offset_rotation) const override;
 		virtual tz::vec3 forward() const override;
+		virtual tz::ren::animation_renderer::object_handle get_landmark(landmark l) const override;
 	};
 }

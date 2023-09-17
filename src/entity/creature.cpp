@@ -44,13 +44,13 @@ namespace game
 	tz::trs entity_creature::get_global_transform(const entity_system& sys) const
 	{
 		tz::assert(this->resources.objects.size());
-		return sys.get_renderer().get_object_global_transform(this->resources.objects.front());
+		return sys.get_renderer().get_object_global_transform(this->skeleton->get_landmark(iskeleton::landmark::root));
 	}
 
 	void entity_creature::set_global_transform(entity_system& sys, tz::trs global_transform)
 	{
 		tz::assert(this->resources.objects.size());
-		tz::trs local = sys.get_renderer().global_to_local_transform(this->resources.objects.front(), global_transform);
+		tz::trs local = sys.get_renderer().global_to_local_transform(this->skeleton->get_landmark(iskeleton::landmark::root), global_transform);
 		this->set_base_transform(sys, local);
 	}
 
