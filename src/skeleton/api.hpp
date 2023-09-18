@@ -83,10 +83,10 @@ namespace game
 		virtual tz::io::gltf model_data() const = 0;
 		// given a TRS representing the location of the skeleton in world space, return a new TRS representing a camera looking at the skeleton from behind.
 		// offsets represent how far away and rotated the camera view is with respect to the back of the skeleton.
-		virtual tz::trs follow(tz::trs location, tz::vec3 offset_displacement, tz::quat offset_rotation) const = 0;
+		virtual tz::trs follow(tz::trs location, tz::vec3 offset_displacement, tz::quat offset_rotation) const;
 		// represents a forward move vector (i.e direction where the skeleton would expect to go if you told it to "move forward").
 		// note that this vector is in local-space. e.g something like {0, 0, -1}
-		virtual tz::vec3 forward() const = 0;
+		virtual tz::vec3 forward() const;
 
 		// retrieve the object handle corresponding to a landmark.
 		// if this skeleton has no such landmark (e.g a banshee does not have legs), nullhand is returned.
