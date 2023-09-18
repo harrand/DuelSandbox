@@ -19,6 +19,14 @@ namespace game
 			this->renderer.remove_objects(pkg, tz::ren::animation_renderer::transform_hierarchy::remove_strategy::remove_children);
 		}
 		this->entities[entity] = nullptr;
+		if(std::find(this->entity_free_list.begin(), this->entity_free_list.end(), entity) == this->entity_free_list.end())
+		{
+			this->entity_free_list.push_back(entity);
+		}
+		else
+		{
+			tz::error("Double remove of entity?");
+		}
 	}
 
 	std::size_t entity_system::entity_count() const

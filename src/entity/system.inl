@@ -34,6 +34,13 @@ namespace game
 				ent = std::make_unique<T>(std::move(skel), pkg);
 			}
 		}
+		if(this->entity_free_list.size())
+		{
+			std::size_t eid = this->entity_free_list.front();
+			this->entity_free_list.erase(this->entity_free_list.begin());
+			this->entities[eid] = std::move(ent);
+			return eid;
+		}
 		this->entities.push_back(std::move(ent));
 		return sz;
 	}
