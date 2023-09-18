@@ -16,6 +16,7 @@ namespace game
 
 		template<typename T>
 		std::size_t add();
+		void remove(std::size_t entity);
 
 		template<typename T>
 		const T& get(std::size_t entity_id) const;

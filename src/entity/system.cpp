@@ -10,6 +10,17 @@ namespace game
 		this->renderer.append_to_render_graph();
 	}
 
+	void entity_system::remove(std::size_t entity)
+	{
+		const auto& ptr = this->entities[entity];
+		if(ptr->static_flags.contains(static_entity_flag::creature))
+		{
+			auto pkg = static_cast<const entity_creature*>(ptr.get())->get_asset_package();
+			this->renderer.remove_objects(pkg, tz::ren::animation_renderer::transform_hierarchy::remove_strategy::remove_children);
+		}
+		this->entities[entity] = nullptr;
+	}
+
 	std::size_t entity_system::entity_count() const
 	{
 		return this->entities.size();
@@ -64,7 +75,10 @@ namespace game
 	{
 		for(auto& ptr : this->entities)
 		{
-			ptr->update(delta, *this);
+			if(ptr != nullptr)
+			{
+				ptr->update(delta, *this);
+			}
 		}
 		this->renderer.update(delta);
 		if(this->tracked_entity.has_value())
@@ -168,7 +182,19 @@ namespace game
 						this->tracked_entity = std::nullopt;
 					}
 				}
-				this->entities[entity_cursor]->dbgui(*this);
+				auto& ent = this->entities[entity_cursor];
+				if(ent != nullptr)
+				{
+					ent->dbgui(*this);
+					if(ImGui::Button("Remove"))
+					{
+						this->remove(entity_cursor);
+						if(this->tracked_entity == entity_cursor)
+						{
+							this->tracked_entity = std::nullopt;
+						}
+					}
+				}
 			}
 			ImGui::EndChild();
 		}
