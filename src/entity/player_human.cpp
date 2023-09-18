@@ -47,7 +47,7 @@ namespace game
 		if(wheel_delta != 0)
 		{
 			float sc = sys.get_follow_offset_scale();
-			sc -= (0.1f * wheel_delta);
+			sc *= 1.0f - (0.1f * wheel_delta);
 			sc = std::clamp(sc, 0.1f, 10.0f);
 			sys.set_follow_offset_scale(sc);
 		}
