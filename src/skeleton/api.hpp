@@ -87,9 +87,34 @@ namespace game
 		// represents a forward move vector (i.e direction where the skeleton would expect to go if you told it to "move forward").
 		// note that this vector is in local-space. e.g something like {0, 0, -1}
 		virtual tz::vec3 forward() const = 0;
+
 		// retrieve the object handle corresponding to a landmark.
 		// if this skeleton has no such landmark (e.g a banshee does not have legs), nullhand is returned.
 		virtual tz::ren::animation_renderer::object_handle get_landmark(landmark l) const = 0;
+		// query as to whether the skeleton has a landmark. returns true if the landmark exists for the skeleton, otherwise false.
+		bool has_landmark(landmark l) const;
+
+		// what if we want to attach other objects to a landmark on a skeleton? e.g equipment
+		// each landmark supports a single attachment, which is an asset package of objects representing the equipped thing.
+		// an attachment is a temporary set of children of the landmark's objects so it is attached to the landmark part.
+		// e.g if a human equips a helmet, we might get the objects representing the helm, and mount it onto landmark::head.
+		struct landmark_attachment
+		{
+			std::string name = "Nothing";
+			// do we want to take ownership of attached objects? probably not.
+			// let's pretend lifetime semantics are safe and sorted elsewhere.
+			tz::ren::animation_renderer::asset_package pkg = {};
+
+			bool empty() const;
+		};
+
+		// i.e equip.
+		void landmark_set_attachment(landmark l, landmark_attachment attachment);
+		// i.e unequip.
+		void landmark_clear_attachment(landmark l);
+		// i.e get equipped
+		landmark_attachment landmark_get_attachment(landmark l) const;
+
 		// which animation is the skeleton currently in?
 		animation_state get_animation_state() const;
 		// set the animation to something new.
@@ -103,6 +128,7 @@ namespace game
 
 		context ctx = {};
 		animation_state old = animation_state::_undefined;
+		std::array<landmark_attachment, (int)landmark::_count> attachments;
 	};
 }
 

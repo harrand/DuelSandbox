@@ -5,6 +5,53 @@ namespace game
 	iskeleton::iskeleton(context ctx):
 	ctx(ctx){}
 
+	bool iskeleton::has_landmark(landmark l) const
+	{
+		return this->get_landmark(l) != tz::nullhand;
+	}
+
+	bool iskeleton::landmark_attachment::empty() const
+	{
+		return this->pkg.objects.empty();
+	}
+
+	void iskeleton::landmark_set_attachment(landmark l, landmark_attachment attachment)
+	{
+		tz::assert(this->has_landmark(l));
+		auto parent_objh = this->get_landmark(l);
+
+		// if we already have an attachment, we need to remove the necessary children.
+		auto old_attachment = this->landmark_get_attachment(l);
+		if(!old_attachment.empty())
+		{
+			for(auto objh : old_attachment.pkg.objects)
+			{
+				// TODO: remove `objh` as a child from `parent_objh`.
+				// first assert that `parent_objh` does indeed contain `objh` as a child.
+				// blocked on being able to re-seat parents/children of objects within tz::ren::mesh/animation_renderer.
+				(void)0;
+			}
+		}
+
+		// set the new children.
+		for(auto objh : attachment.pkg.objects)
+		{
+			// TODO: set `objh` as a child of `parent_objh`
+			(void)0;
+		}
+		tz::error("NYI");
+	}
+
+	void iskeleton::landmark_clear_attachment(landmark l)
+	{
+		this->landmark_set_attachment(l, {});
+	}
+
+	iskeleton::landmark_attachment iskeleton::landmark_get_attachment(landmark l) const
+	{
+		return this->attachments[(int)l];
+	}
+
 	iskeleton::animation_state iskeleton::get_animation_state() const
 	{
 		return old;
