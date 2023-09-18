@@ -41,6 +41,26 @@ namespace game
 		return this->resources;
 	}
 
+	tz::trs entity_creature::get_global_transform(const entity_system& sys) const
+	{
+		return this->get_global_transform(sys, iskeleton::landmark::root);
+	}
+
+	void entity_creature::set_global_transform(entity_system& sys, tz::trs global_transform)
+	{
+		this->set_global_transform(sys, global_transform, iskeleton::landmark::root);
+	}
+
+	tz::trs entity_creature::get_base_transform(const entity_system& sys) const
+	{
+		return this->get_base_transform(sys, iskeleton::landmark::root);
+	}
+
+	void entity_creature::set_base_transform(entity_system& sys, tz::trs transform)
+	{
+		this->set_base_transform(sys, transform, iskeleton::landmark::root);
+	}
+
 	tz::trs entity_creature::get_global_transform(const entity_system& sys, iskeleton::landmark landmark) const
 	{
 		tz::assert(this->resources.objects.size());
